@@ -1,0 +1,149 @@
+[gd_scene load_steps=22 format=3 uid="uid://cfld2vyvrj4tb"]
+
+[ext_resource type="Environment" uid="uid://d2xetv7pmm1ot" path="res://misc/environment.tres" id="1_nxogm"]
+[ext_resource type="Texture2D" uid="uid://vjqyq6hv8wgf" path="res://debug/dev_cyan.png" id="1_ulcgi"]
+[ext_resource type="Script" uid="uid://dxxxd80ruhghd" path="res://scripts/player.gd" id="2_3253y"]
+[ext_resource type="Script" uid="uid://cmuuglvan3sn0" path="res://scripts/camera.gd" id="2_u3cyc"]
+[ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="3_ni31j"]
+[ext_resource type="Script" uid="uid://csjccrhj5wnx7" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3d.gd" id="4_xlvrw"]
+[ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="5_73fnb"]
+[ext_resource type="Script" uid="uid://bbds77b6fp5h5" path="res://scripts/camera_follow.gd" id="6_fy5k1"]
+[ext_resource type="Script" uid="uid://ci58u78oj6ma6" path="res://scripts/cursor_lock.gd" id="7_5juve"]
+[ext_resource type="PackedScene" uid="uid://blt3fo1ig7jue" path="res://prefabs/bullet.tscn" id="8_xlvrw"]
+[ext_resource type="PackedScene" uid="uid://i0nr74njvi5s" path="res://prefabs/enemy.tscn" id="9_73fnb"]
+[ext_resource type="PackedScene" uid="uid://b2d1noctg6g8a" path="res://prefabs/box.tscn" id="10_5juve"]
+[ext_resource type="Texture2D" uid="uid://bvanu3onkvvii" path="res://textures/crosshair007.png" id="13_akxrc"]
+[ext_resource type="Script" uid="uid://lsqbw6hhr5p0" path="res://scripts/ui.gd" id="13_gu47o"]
+[ext_resource type="Script" uid="uid://dlgoyp8watn0y" path="res://scripts/aim_handler.gd" id="15_8hm71"]
+
+[sub_resource type="Resource" id="Resource_5juve"]
+script = ExtResource("5_73fnb")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8hm71"]
+size = Vector3(0.2, 0.1, 0.2)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nxogm"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_3253y"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u3cyc"]
+albedo_texture = ExtResource("1_ulcgi")
+metallic_specular = 0.0
+roughness = 0.0
+uv1_scale = Vector3(2, 2, 2)
+texture_filter = 0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_m7jmp"]
+size = Vector2(64, 64)
+
+[node name="Scene" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 15, 0)
+environment = ExtResource("1_nxogm")
+size = 8.767
+script = ExtResource("2_u3cyc")
+
+[node name="PhantomCameraHost" type="Node" parent="Camera3D"]
+process_priority = 300
+process_physics_priority = 300
+script = ExtResource("3_ni31j")
+metadata/_custom_type_script = "uid://bd046eokvcnu2"
+
+[node name="PhantomCamera3D" type="Node3D" parent="." node_paths=PackedStringArray("follow_target")]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 15, 0)
+top_level = true
+script = ExtResource("4_xlvrw")
+follow_mode = 2
+follow_target = NodePath("../CameraFollow")
+tween_resource = SubResource("Resource_5juve")
+follow_offset = Vector3(0, 15, 0)
+metadata/_custom_type_script = "uid://csjccrhj5wnx7"
+
+[node name="CameraFollow" type="Node3D" parent="." node_paths=PackedStringArray("player", "cursor_lock")]
+script = ExtResource("6_fy5k1")
+player = NodePath("../Player")
+cursor_lock = NodePath("../CursorLock")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+collision_layer = 2
+collision_mask = 241
+script = ExtResource("2_3253y")
+bullet_scene = ExtResource("8_xlvrw")
+hitscan_shape = SubResource("BoxShape3D_8hm71")
+hitscan_mask = 5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_nxogm")
+
+[node name="PlayerMesh" type="MeshInstance3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_3253y")
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_u3cyc")
+mesh = SubResource("PlaneMesh_m7jmp")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 12, 4)
+
+[node name="Enemy" parent="." instance=ExtResource("9_73fnb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.561147, 0, -9.686258)
+collision_mask = 9
+
+[node name="Boxes" type="Node3D" parent="."]
+transform = Transform3D(-4.3711385e-08, 0, -0.9999999, 0, 1, 0, 0.9999999, 0, -4.3711385e-08, 9.692062, 0, -4.7522035)
+
+[node name="Box2" parent="Boxes" instance=ExtResource("10_5juve")]
+transform = Transform3D(3.4156053, 0, 1.7763568e-14, 0, 1, 0, -2.842171e-14, 0, 0.9999999, -5.335074, 0, -5.9692545)
+
+[node name="Box" parent="Boxes" instance=ExtResource("10_5juve")]
+transform = Transform3D(-2.1335504e-07, 0, 1.0000001, 0, 1, 0, -4.880992, 0, -4.3711417e-08, 8.052173, 0, 13.432118)
+
+[node name="Box3" parent="Boxes" instance=ExtResource("10_5juve")]
+transform = Transform3D(3.4156053, 0, 1.7763568e-14, 0, 1, 0, -4.2632564e-14, 0, 0.9999999, -5.335072, 0, 32.825317)
+
+[node name="Box4" parent="Boxes" instance=ExtResource("10_5juve")]
+transform = Transform3D(-1.6422703e-07, 0, 1.0000001, 0, 1, 0, -3.7570744, 0, -4.3711434e-08, -18.717506, 0, 9.053779)
+
+[node name="Box5" parent="Boxes" instance=ExtResource("10_5juve")]
+transform = Transform3D(-3.799438e-08, 0, 1.0000001, 0, 1, 0, -0.8692095, 0, -4.371143e-08, 2.9712734, 0, 11.4666195)
+
+[node name="Box6" parent="Boxes" instance=ExtResource("10_5juve")]
+transform = Transform3D(-3.7994386e-08, 0, 1.0000001, 0, 1, 0, -0.8692095, 0, -4.3711438e-08, -3.10717, 0, 18.976614)
+
+[node name="CursorLock" type="Node3D" parent="."]
+script = ExtResource("7_5juve")
+
+[node name="UiControl" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("13_gu47o")
+
+[node name="Reticle" type="TextureRect" parent="UiControl"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 12.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(16, 16)
+texture = ExtResource("13_akxrc")
+expand_mode = 1
+
+[node name="AimHandler" type="Node3D" parent="."]
+script = ExtResource("15_8hm71")
+
+[connection signal="aim_update" from="AimHandler" to="CameraFollow" method="_on_aim_handler_aim_update"]
+[connection signal="aim_update" from="AimHandler" to="Player" method="_on_aim_handler_aim_update"]
+[connection signal="aim_update" from="AimHandler" to="UiControl" method="_on_aim_handler_aim_update"]
