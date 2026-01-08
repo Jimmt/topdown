@@ -1,7 +1,6 @@
-[gd_scene load_steps=23 format=3 uid="uid://cfld2vyvrj4tb"]
+[gd_scene load_steps=24 format=3 uid="uid://cfld2vyvrj4tb"]
 
 [ext_resource type="Environment" uid="uid://d2xetv7pmm1ot" path="res://misc/environment.tres" id="1_nxogm"]
-[ext_resource type="Texture2D" uid="uid://vjqyq6hv8wgf" path="res://debug/dev_cyan.png" id="1_ulcgi"]
 [ext_resource type="Script" uid="uid://dxxxd80ruhghd" path="res://scripts/player.gd" id="2_3253y"]
 [ext_resource type="Script" uid="uid://cmuuglvan3sn0" path="res://scripts/camera.gd" id="2_u3cyc"]
 [ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="3_ni31j"]
@@ -10,7 +9,9 @@
 [ext_resource type="Script" uid="uid://bbds77b6fp5h5" path="res://scripts/camera_follow.gd" id="6_fy5k1"]
 [ext_resource type="Script" uid="uid://ci58u78oj6ma6" path="res://scripts/cursor_lock.gd" id="7_5juve"]
 [ext_resource type="PackedScene" uid="uid://blt3fo1ig7jue" path="res://prefabs/bullet.tscn" id="8_xlvrw"]
+[ext_resource type="PackedScene" uid="uid://cqnpf6monqf3s" path="res://prefabs/player_character.tscn" id="9_17rhs"]
 [ext_resource type="PackedScene" uid="uid://i0nr74njvi5s" path="res://prefabs/enemy.tscn" id="9_73fnb"]
+[ext_resource type="Texture2D" uid="uid://c20jmqjo22t2y" path="res://debug/greybox_grey_solid.png" id="9_223my"]
 [ext_resource type="PackedScene" uid="uid://b2d1noctg6g8a" path="res://prefabs/box.tscn" id="10_5juve"]
 [ext_resource type="PackedScene" uid="uid://b7heu11qy22j" path="res://prefabs/enemy_bullet.tscn" id="11_223my"]
 [ext_resource type="Texture2D" uid="uid://bvanu3onkvvii" path="res://textures/crosshair007.png" id="13_akxrc"]
@@ -25,14 +26,11 @@ size = Vector3(0.2, 0.1, 0.2)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nxogm"]
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_3253y"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_223my"]
+size = Vector3(3, 1, 2.5)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u3cyc"]
-albedo_texture = ExtResource("1_ulcgi")
-metallic_specular = 0.0
-roughness = 0.0
-uv1_scale = Vector3(2, 2, 2)
-texture_filter = 0
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_17rhs"]
+albedo_texture = ExtResource("9_223my")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_m7jmp"]
 size = Vector2(64, 64)
@@ -78,12 +76,18 @@ hitscan_mask = 5
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_nxogm")
 
-[node name="PlayerMesh" type="MeshInstance3D" parent="Player"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-mesh = SubResource("CapsuleMesh_3253y")
+[node name="StandardCharacter" parent="Player" instance=ExtResource("9_17rhs")]
+
+[node name="AttackArea3D" type="Area3D" parent="Player"]
+collision_layer = 8
+collision_mask = 5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player/AttackArea3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.370642, -1.0148926)
+shape = SubResource("BoxShape3D_223my")
 
 [node name="Ground" type="MeshInstance3D" parent="."]
-material_override = SubResource("StandardMaterial3D_u3cyc")
+material_override = SubResource("StandardMaterial3D_17rhs")
 mesh = SubResource("PlaneMesh_m7jmp")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
@@ -168,6 +172,7 @@ collision_mask = 9
 player = NodePath("../Player")
 bullet_scene = ExtResource("11_223my")
 
+[connection signal="body_entered" from="Player/AttackArea3D" to="Player" method="_on_attack_area_3d_body_entered"]
 [connection signal="aim_update" from="AimHandler" to="CameraFollow" method="_on_aim_handler_aim_update"]
 [connection signal="aim_update" from="AimHandler" to="Player" method="_on_aim_handler_aim_update"]
 [connection signal="aim_update" from="AimHandler" to="UiControl" method="_on_aim_handler_aim_update"]
