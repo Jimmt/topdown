@@ -3,6 +3,7 @@ extends Node3D
 @export var sensitivity: float = 0.4
 @onready var player: Node3D = get_parent().get_node("Player")
 var aim_target_offset: Vector2 = Vector2.ZERO
+var aim_pos: Vector3 = Vector3.ZERO
 
 signal aim_update(screenPos: Vector2, pos: Vector3, dir: Vector3)
 

@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://b7heu11qy22j"]
+
+[ext_resource type="Script" uid="uid://cpccj1kjoq0jd" path="res://scripts/enemy_bullet.gd" id="1_piu3n"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6tgv0"]
+margin = 0.02
+size = Vector3(1, 0.1, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_piu3n"]
+size = Vector3(0.1, 0.1, 1)
+
+[node name="EnemyBullet" type="CharacterBody3D"]
+collision_layer = 16
+collision_mask = 3
+script = ExtResource("1_piu3n")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_6tgv0")
+
+[node name="EnemyBulletMesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_piu3n")

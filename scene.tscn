@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://cfld2vyvrj4tb"]
+[gd_scene load_steps=23 format=3 uid="uid://cfld2vyvrj4tb"]
 
 [ext_resource type="Environment" uid="uid://d2xetv7pmm1ot" path="res://misc/environment.tres" id="1_nxogm"]
 [ext_resource type="Texture2D" uid="uid://vjqyq6hv8wgf" path="res://debug/dev_cyan.png" id="1_ulcgi"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://blt3fo1ig7jue" path="res://prefabs/bullet.tscn" id="8_xlvrw"]
 [ext_resource type="PackedScene" uid="uid://i0nr74njvi5s" path="res://prefabs/enemy.tscn" id="9_73fnb"]
 [ext_resource type="PackedScene" uid="uid://b2d1noctg6g8a" path="res://prefabs/box.tscn" id="10_5juve"]
+[ext_resource type="PackedScene" uid="uid://b7heu11qy22j" path="res://prefabs/enemy_bullet.tscn" id="11_223my"]
 [ext_resource type="Texture2D" uid="uid://bvanu3onkvvii" path="res://textures/crosshair007.png" id="13_akxrc"]
 [ext_resource type="Script" uid="uid://lsqbw6hhr5p0" path="res://scripts/ui.gd" id="13_gu47o"]
 [ext_resource type="Script" uid="uid://dlgoyp8watn0y" path="res://scripts/aim_handler.gd" id="15_8hm71"]
@@ -88,10 +89,6 @@ mesh = SubResource("PlaneMesh_m7jmp")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 12, 4)
 
-[node name="Enemy" parent="." instance=ExtResource("9_73fnb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.561147, 0, -9.686258)
-collision_mask = 9
-
 [node name="Boxes" type="Node3D" parent="."]
 transform = Transform3D(-4.3711385e-08, 0, -0.9999999, 0, 1, 0, 0.9999999, 0, -4.3711385e-08, 9.692062, 0, -4.7522035)
 
@@ -111,7 +108,10 @@ transform = Transform3D(-1.6422703e-07, 0, 1.0000001, 0, 1, 0, -3.7570744, 0, -4
 transform = Transform3D(-3.799438e-08, 0, 1.0000001, 0, 1, 0, -0.8692095, 0, -4.371143e-08, 2.9712734, 0, 11.4666195)
 
 [node name="Box6" parent="Boxes" instance=ExtResource("10_5juve")]
-transform = Transform3D(-3.7994386e-08, 0, 1.0000001, 0, 1, 0, -0.8692095, 0, -4.3711438e-08, -3.10717, 0, 18.976614)
+transform = Transform3D(-7.706287e-08, 0, 1.0000001, 0, 1, 0, -1.7629914, 0, -4.371144e-08, -3.10717, 0, 18.976614)
+
+[node name="Box7" parent="Boxes" instance=ExtResource("10_5juve")]
+transform = Transform3D(0.6299172, 0, 0.6890633, 0, 0.99999994, 0, -0.5989402, 0, 0.7247011, -9.735222, 0, 4.817016)
 
 [node name="CursorLock" type="Node3D" parent="."]
 script = ExtResource("7_5juve")
@@ -143,6 +143,30 @@ expand_mode = 1
 
 [node name="AimHandler" type="Node3D" parent="."]
 script = ExtResource("15_8hm71")
+
+[node name="Enemy" parent="." node_paths=PackedStringArray("player") instance=ExtResource("9_73fnb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.561147, 0, -9.686258)
+collision_mask = 9
+player = NodePath("../Player")
+bullet_scene = ExtResource("11_223my")
+
+[node name="Enemy2" parent="." node_paths=PackedStringArray("player") instance=ExtResource("9_73fnb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.802947, 0, -14.058943)
+collision_mask = 9
+player = NodePath("../Player")
+bullet_scene = ExtResource("11_223my")
+
+[node name="Enemy3" parent="." node_paths=PackedStringArray("player") instance=ExtResource("9_73fnb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.907163, 0, -9.593575)
+collision_mask = 9
+player = NodePath("../Player")
+bullet_scene = ExtResource("11_223my")
+
+[node name="Enemy4" parent="." node_paths=PackedStringArray("player") instance=ExtResource("9_73fnb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.885979, 0, -5.7199454)
+collision_mask = 9
+player = NodePath("../Player")
+bullet_scene = ExtResource("11_223my")
 
 [connection signal="aim_update" from="AimHandler" to="CameraFollow" method="_on_aim_handler_aim_update"]
 [connection signal="aim_update" from="AimHandler" to="Player" method="_on_aim_handler_aim_update"]

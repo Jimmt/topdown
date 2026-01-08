@@ -23,6 +23,13 @@ PhantomCameraManager="*res://addons/phantom_camera/scripts/managers/phantom_came
 
 settings/addon_root_folder="res://addons"
 
+[display]
+
+window/size/viewport_width=1600
+window/size/viewport_height=900
+window/size/initial_position_type=0
+window/size/borderless=true
+
 [dotnet]
 
 project/assembly_name="topdown"
@@ -58,13 +65,19 @@ shoot={
 "events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":1,"position":Vector2(257, 9),"global_position":Vector2(266, 57),"factor":1.0,"button_index":1,"canceled":false,"pressed":true,"double_click":false,"script":null)
 ]
 }
+dash={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":32,"key_label":0,"unicode":32,"location":0,"echo":false,"script":null)
+]
+}
 
 [layer_names]
 
 3d_physics/layer_1="Default"
 3d_physics/layer_2="Player"
 3d_physics/layer_3="Enemy"
-3d_physics/layer_4="Bullet"
+3d_physics/layer_4="PlayerBullet"
+3d_physics/layer_5="EnemyBullet"
 
 [physics]
 

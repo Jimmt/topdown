@@ -2,8 +2,8 @@ extends Node3D
 
 @export var player: Node3D
 @export var cursor_lock: Node3D
-@export var lean_scale: float = 0.3
-@export var smooth_speed: float = 3.5
+@export var lean_scale: float = 0.2
+@export var smooth_speed: float = 35
 
 var aim_dir: Vector3
 
